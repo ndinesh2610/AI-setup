@@ -1,3 +1,0 @@
-Python is great.
-Python is powerful.
-Python is easy to learn.
