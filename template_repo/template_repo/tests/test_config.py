@@ -1,4 +1,4 @@
-"""Feature A: application configuration tests."""
+"""Feature A and Feature B: configuration security tests."""
 
 from pydantic import SecretStr
 
