@@ -13,12 +13,12 @@
 
 # ---------------------------------------------------------------- stage 1: build
 # A "multi-stage" build keeps build tools out of the final image (CTR-01).
-FROM python:<PYTHON_IMAGE_TAG>@sha256:<PYTHON_IMAGE_DIGEST> AS builder
+FROM python:3.15.2-slim-trixie@sha256:e97b88e416c3c01eb427b21fd8cd3ebf006e6ee38afcfcc3cae1c54ee2ab0a75 AS builder
 
 # Copy the uv program from its official image instead of installing it with pip.
-COPY --from=ghcr.io/astral-sh/uv:<UV_IMAGE_TAG> /uv /bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.13.7@sha256:96f40d3904aad8d0bd010539001d36c8e2188b981e1334471a90c4a1d93bb490 /uv /bin/uv
 
-WORKDIR /build
+WORKDIR /app
 
 # Copy only the dependency files first. Docker caches this step, so a code change does not
 # re-install every package. uv.lock must exist: run `uv lock` once and commit it (README, Quick start).
@@ -29,7 +29,8 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --locked --no-dev --no-install-project
 
 # ---------------------------------------------------------------- stage 2: run
-FROM python:<PYTHON_IMAGE_TAG>@sha256:<PYTHON_IMAGE_DIGEST> AS runtime
+FROM python:3.15.2-slim-trixie@sha256:e97b88e416c3c01eb427b21fd8cd3ebf006e6ee38afcfcc3cae1c54ee2ab0a75 AS runtime
+COPY --from=ghcr.io/astral-sh/uv:0.13.7@sha256:96f40d3904aad8d0bd010539001d36c8e2188b981e1334471a90c4a1d93bb490 /uv /bin/uv
 
 # Run as a normal user with a fixed ID, never as root (CTR-02).
 RUN useradd --create-home --uid 1000 --shell /bin/sh appuser
@@ -37,7 +38,7 @@ RUN useradd --create-home --uid 1000 --shell /bin/sh appuser
 WORKDIR /app
 
 # Bring the installed libraries from stage 1.
-COPY --from=builder /build/.venv /app/.venv
+COPY --from=builder /app/.venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
