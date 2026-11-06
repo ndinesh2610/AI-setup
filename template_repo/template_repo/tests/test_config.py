@@ -1,4 +1,4 @@
-"""Configuration tests: secrets must never show up when settings are printed (CFG-09)."""
+"""Feature A: application configuration tests."""
 
 from pydantic import SecretStr
 
