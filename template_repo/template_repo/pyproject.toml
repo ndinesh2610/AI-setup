@@ -33,6 +33,8 @@ dependencies = [
     "pytesseract>=0.3.13",
     "pillow>=13.0.0",
     "pdf2image>=1.17.0",
+    "sentence-transformers>=6.2.0",
+    "psycopg[binary]>=3.3.8",
 ]
 
 [dependency-groups]
