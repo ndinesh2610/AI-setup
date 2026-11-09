@@ -30,9 +30,7 @@ class LLMClient:
         settings: Settings | None = None,
         transport: httpx.BaseTransport | None = None,
     ) -> None:
-        """Initialize the client with application settings."""
         self.settings = settings or get_settings()
-
         self.client = httpx.Client(
             base_url=self.settings.llm_base_url.rstrip("/") + "/",
             headers={
@@ -43,13 +41,23 @@ class LLMClient:
             transport=transport,
         )
 
-    def complete(self, prompt: str) -> str:
-        """Send a prompt and return the model's response."""
+    def complete(
+        self,
+        prompt: str,
+        *,
+        temperature: float = 0.0,
+        seed: int | None = 42,
+        max_tokens: int = 1024,
+    ) -> str:
+        """Send a prompt with configurable generation parameters."""
         response = self.client.post(
             "chat/completions",
             json={
                 "model": self.settings.llm_model,
                 "messages": [{"role": "user", "content": prompt}],
+                "temperature": temperature,
+                "seed": seed,
+                "max_tokens": max_tokens,
             },
         )
 

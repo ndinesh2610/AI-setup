@@ -81,3 +81,29 @@ def test_llm_client_rejects_malformed_response() -> None:
         client.complete("Hello")
 
     client.close()
+
+
+def test_llm_client_generation_parameters() -> None:
+    def mock_response(request: httpx.Request) -> httpx.Response:
+        payload = json.loads(request.content)
+        assert payload["temperature"] == 0.2
+        assert payload["seed"] == 42
+        assert payload["max_tokens"] == 2048
+        return httpx.Response(
+            200,
+            json={"choices": [{"message": {"content": "Test passed"}}]},
+        )
+
+    settings = Settings(
+        llm_base_url="https://llm.example.test/v1",
+        llm_model="test-model",
+        llm_api_key=SecretStr("test-key"),
+        llm_timeout_seconds=2.0,
+    )
+    client = LLMClient(
+        settings=settings,
+        transport=httpx.MockTransport(mock_response),
+    )
+
+    assert client.complete("Test", temperature=0.2, seed=42, max_tokens=2048) == "Test passed"
+    client.close()
