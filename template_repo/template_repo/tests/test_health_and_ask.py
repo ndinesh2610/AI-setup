@@ -1,11 +1,23 @@
-"""Starter tests. They show the style: one behaviour per test, named
-test_<unit>_<condition>_<expected> (Playbook TST-11)."""
+"""Health and ask endpoint tests."""
 
+import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
+from app.security import AuthenticatedUser, get_current_user
 
 client = TestClient(app)
+
+
+@pytest.fixture(autouse=True)
+def authenticated_test_user():
+    """Inject a test identity for tests in this module only."""
+    app.dependency_overrides[get_current_user] = lambda: AuthenticatedUser(
+        tenant_id="test_tenant",
+        roles=["employee"],
+    )
+    yield
+    app.dependency_overrides.pop(get_current_user, None)
 
 
 def test_health_alive_returns_ok():
