@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     llm_model: str = ""
     llm_api_key: SecretStr = SecretStr("")
     llm_timeout_seconds: float = 30.0
+    context_token_budget: int = 2000
 
     @property
     def docs_enabled(self) -> bool:

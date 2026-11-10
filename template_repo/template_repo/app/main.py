@@ -13,7 +13,7 @@ from fastapi.responses import JSONResponse
 
 from app.config import get_settings
 from app.logging_config import request_id_var, setup_logging
-from app.routers import ask, health
+from app.routers import ask, health, sources
 
 logger = logging.getLogger(__name__)
 
@@ -61,6 +61,7 @@ def create_app() -> FastAPI:
 
     app.include_router(health.router)
     app.include_router(ask.router)
+    app.include_router(sources.router)
     return app
 
 

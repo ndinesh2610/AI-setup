@@ -1,0 +1,62 @@
+[
+  {
+    "question": "How many days of annual leave do employees receive?",
+    "expected_document_ids": [1]
+  },
+  {
+    "question": "What is the yearly leave entitlement?",
+    "expected_document_ids": [1]
+  },
+  {
+    "question": "How much annual vacation can an employee take?",
+    "expected_document_ids": [1]
+  },
+  {
+    "question": "Who must approve leave requests?",
+    "expected_document_ids": [2]
+  },
+  {
+    "question": "Is manager approval required for leave?",
+    "expected_document_ids": [2]
+  },
+  {
+    "question": "What is the approval process for employee leave?",
+    "expected_document_ids": [2]
+  },
+  {
+    "question": "How many days per week can employees work remotely?",
+    "expected_document_ids": [3]
+  },
+  {
+    "question": "What is the company's remote work allowance?",
+    "expected_document_ids": [3]
+  },
+  {
+    "question": "How often are employees allowed to work from home?",
+    "expected_document_ids": [3]
+  },
+  {
+    "question": "What password practices must employees follow?",
+    "expected_document_ids": [4]
+  },
+  {
+    "question": "What kind of passwords are employees required to use?",
+    "expected_document_ids": [4]
+  },
+  {
+    "question": "What is the company password security requirement?",
+    "expected_document_ids": [4]
+  },
+  {
+    "question": "Can employees share confidential company information?",
+    "expected_document_ids": [5]
+  },
+  {
+    "question": "What are the rules for sharing confidential information?",
+    "expected_document_ids": [5]
+  },
+  {
+    "question": "How should employees handle confidential company data?",
+    "expected_document_ids": [5]
+  }
+]
