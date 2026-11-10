@@ -28,12 +28,12 @@ class Settings(BaseSettings):
     postgres_port: int = 5432
     postgres_db: str = "example"
     postgres_user: str = "app_user"
-    postgres_password: SecretStr = SecretStr("")  # SecretStr hides the value if printed (CFG-09)
+    postgres_password: SecretStr  # SecretStr hides the value if printed (CFG-09)
 
     # --- language model (provider-agnostic: switch provider by changing these three)
-    llm_base_url: str = ""
-    llm_model: str = ""
-    llm_api_key: SecretStr = SecretStr("")
+    llm_base_url: str
+    llm_model: str
+    llm_api_key: SecretStr
     llm_timeout_seconds: float = 30.0
     context_token_budget: int = 2000
 

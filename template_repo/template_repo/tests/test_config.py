@@ -19,3 +19,11 @@ def test_settings_repr_hides_secret_values():
 def test_docs_enabled_only_in_development():
     assert Settings(app_environment="development").docs_enabled is True
     assert Settings(app_environment="production").docs_enabled is False
+
+
+def test_required_settings_reject_missing_values():
+    import pytest
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None)
