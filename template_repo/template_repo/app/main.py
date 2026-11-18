@@ -7,13 +7,15 @@ Routers are thin (they only translate HTTP), services hold the logic, models des
 
 import logging
 import uuid
+from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.config import get_settings
 from app.logging_config import request_id_var, setup_logging
-from app.routers import ask, health, sources
+from app.routers import ask, health, sources, ui
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +44,13 @@ def create_app() -> FastAPI:
         finally:
             request_id_var.reset(token)
         response.headers["X-Request-ID"] = request_id
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; script-src 'self'; "
+            "style-src 'self'; object-src 'none'; "
+            "frame-ancestors 'none'; base-uri 'none'; "
+            "form-action 'self'"
+        )
+        response.headers["X-Content-Type-Options"] = "nosniff"
         return response
 
     @app.exception_handler(Exception)
@@ -59,6 +68,12 @@ def create_app() -> FastAPI:
             },
         )
 
+    app.mount(
+        "/static",
+        StaticFiles(directory=Path(__file__).resolve().parent / "static"),
+        name="static",
+    )
+    app.include_router(ui.router)
     app.include_router(health.router)
     app.include_router(ask.router)
     app.include_router(sources.router)

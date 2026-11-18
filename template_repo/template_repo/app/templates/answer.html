@@ -1,0 +1,16 @@
+{% if error %}
+    <p role="alert">{{ error }}</p>
+{% else %}
+    <h2>Answer</h2>
+    <p>{{ answer }}</p>
+
+    <h2>Citations</h2>
+    {% for citation in citations %}
+        <article>
+            <h3>{{ citation.source }}</h3>
+            <p>{{ citation.passage }}</p>
+        </article>
+    {% else %}
+        <p>No citations available.</p>
+    {% endfor %}
+{% endif %}
