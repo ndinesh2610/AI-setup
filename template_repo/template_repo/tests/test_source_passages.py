@@ -61,3 +61,27 @@ def test_source_lookup_returns_none_when_document_is_not_authorized():
     )
 
     assert result is None
+
+
+def test_source_lookup_passes_requesting_tenant_to_database():
+    """The database query must use the authenticated user's tenant."""
+    connection = FakeConnection(None)
+    user = AuthenticatedUser(
+        tenant_id="company_b",
+        roles=["employee"],
+    )
+
+    result = get_source_passage(
+        1,
+        user,
+        connection=connection,
+    )
+
+    assert result is None
+    assert connection.fake_cursor.params == (
+        1,
+        "company_b",
+        ["employee"],
+    )
+    assert "tenant_id = %s" in connection.fake_cursor.query
+    assert "allowed_roles && %s::text[]" in connection.fake_cursor.query

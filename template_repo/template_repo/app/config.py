@@ -36,6 +36,10 @@ class Settings(BaseSettings):
     llm_api_key: SecretStr
     llm_timeout_seconds: float = 30.0
     context_token_budget: int = 2000
+    jwt_secret_key: SecretStr
+    jwt_issuer: str = "fde-service"
+    jwt_audience: str = "fde-n8n"
+    jwt_algorithm: str = "HS256"
 
     @property
     def docs_enabled(self) -> bool:

@@ -15,7 +15,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.config import get_settings
 from app.logging_config import request_id_var, setup_logging
-from app.routers import ask, health, sources, ui
+from app.routers import ask, auth, health, sources, ui, user_notes
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +76,9 @@ def create_app() -> FastAPI:
     app.include_router(ui.router)
     app.include_router(health.router)
     app.include_router(ask.router)
+    app.include_router(auth.router)
     app.include_router(sources.router)
+    app.include_router(user_notes.router)
     return app
 
 
