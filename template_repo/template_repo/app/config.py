@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     app_environment: str = "development"  # development | production
     app_base_path: str = ""  # set when the app sits behind a proxy prefix (ARC-12)
     app_timezone: str = "UTC"
+    cors_allowed_origins: list[str] = []
+    max_request_bytes: int = 5 * 1024 * 1024
 
     # --- database (a least-privilege role, not the admin: DB-02)
     postgres_host: str = "localhost"

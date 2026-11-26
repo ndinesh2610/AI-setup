@@ -22,3 +22,6 @@ Thumbs.db
 # Local data
 uploads/
 *.sqlite3
+
+# Private uploaded files
+data/private_uploads/

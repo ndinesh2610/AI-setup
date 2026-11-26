@@ -10,12 +10,14 @@ import uuid
 from pathlib import Path
 
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.config import get_settings
 from app.logging_config import request_id_var, setup_logging
-from app.routers import ask, auth, health, sources, ui, user_notes
+from app.request_size_limit import RequestSizeLimitMiddleware
+from app.routers import ask, auth, health, sources, ui, uploads, user_notes
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +34,19 @@ def create_app() -> FastAPI:
         redoc_url=None,
         openapi_url="/openapi.json" if settings.docs_enabled else None,
         root_path=settings.app_base_path,
+    )
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.cors_allowed_origins,
+        allow_credentials=True,
+        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
+        allow_headers=["Content-Type", "Authorization", "X-CSRF-Token"],
+    )
+
+    app.add_middleware(
+        RequestSizeLimitMiddleware,
+        max_bytes=settings.max_request_bytes,
     )
 
     @app.middleware("http")
@@ -79,6 +94,7 @@ def create_app() -> FastAPI:
     app.include_router(auth.router)
     app.include_router(sources.router)
     app.include_router(user_notes.router)
+    app.include_router(uploads.router)
     return app
 
 
